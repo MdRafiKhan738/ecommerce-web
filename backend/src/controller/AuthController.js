@@ -32,8 +32,8 @@ const register = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
+      secure: ,true
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -61,8 +61,8 @@ const login = async (req, res) => {
 
     res.cookie("token ", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -113,8 +113,8 @@ const googlelogin = async (req, res) => {
     // কুকি সেট করা
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -134,8 +134,8 @@ const adminlogin = async (req, res) => {
 
       res.cookie("token", token1, {
         httpOnly: true,
-        secure: false,
-        sameSite: "Strict",
+        secure: true,
+        sameSite: "none",
         maxAge: 24 * 60 * 60 * 1000,
       });
        
