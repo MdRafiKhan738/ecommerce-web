@@ -1,6 +1,6 @@
 // AiUltra.jsx – FIXED & SUPER HUGE AI CHAT COMPONENT
 import React, { useContext, useState, useEffect, useRef } from "react";
-import aiIcon from "../assets/e-commerce mern assets/ai.png";
+import aiIcon from "../assets/E-commerce MERN Assets/ai.png";
 import { shopdatacontext } from "../context/ShopContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
