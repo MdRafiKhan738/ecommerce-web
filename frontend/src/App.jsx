@@ -27,15 +27,20 @@ const App = () => {
     <div className='relative'>
       {/* ✅ Loader শুধুমাত্র তখন দেখাবে যখন loading = true */}
       {loading && <Loader />}
+      <Routes>
 
+
+
+          <Route path="/registration" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
       {/* ✅ Navbar সবসময় দেখাবে */}
       <Nav />
 
       {/* ✅ Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/login" element={<Login />} />
+      
         <Route path="/collection" element={<Collection />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/products" element={<Product />} />

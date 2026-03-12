@@ -1,8 +1,9 @@
+// src/Pages/OrderDetails.jsx
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { userdatacontext } from "../context/UserContext";
 import axios from "axios";
-import { motion, useAnimation } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaMoneyBillWave,
   FaRupeeSign,
@@ -11,7 +12,12 @@ import {
   FaMapMarkerAlt,
   FaUser,
   FaPhone,
-  FaEnvelope
+  FaEnvelope,
+  FaArrowLeft,
+  FaBoxOpen,
+  FaTruck,
+  FaHome,
+  FaCreditCard
 } from "react-icons/fa";
 
 const statusSteps = ["Pending", "Processed", "Shipped", "Delivered"];
@@ -23,156 +29,310 @@ const OrderDetails = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const controls = useAnimation();
 
-  // ✅ Fetch order details
   const fetchOrder = async () => {
     try {
       setLoading(true);
       setError("");
-
       const res = await axios.get(`http://localhost:5000/order/${orderId}`, {
         withCredentials: true
       });
-
       setOrder(res.data);
       setLoading(false);
     } catch (err) {
       console.error("Fetch order error:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Failed to fetch order");
+      setError(err.response?.data?.message || "Failed to fetch order details.");
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!userData) return;
-    fetchOrder();
-  }, [userData]);
+    if (userData) fetchOrder();
+  }, [userData, orderId]);
 
-  const getStatusIndex = (status) => statusSteps.indexOf(status);
+  const getStatusIndex = (status) => statusSteps.indexOf(status || "Pending");
 
-  if (!userData)
-    return <div className="mt-32 text-center text-3xl text-white animate-pulse">Login first to view order!</div>;
+  // --- Animation Variants ---
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15 },
+    },
+  };
 
-  if (loading)
-    return <div className="mt-32 text-center text-3xl text-white animate-pulse">Loading order...</div>;
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
+  };
 
-  if (error)
-    return <div className="mt-32 text-center text-3xl text-red-500">{error}</div>;
+  // --- Render States ---
+  if (!userData) {
+    return (
+      <div className="min-h-screen bg-[#020617] flex items-center justify-center">
+        <motion.div 
+          animate={{ scale: [1, 1.05, 1], textShadow: ["0px 0px 0px #3b82f6", "0px 0px 20px #3b82f6", "0px 0px 0px #3b82f6"] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="text-center text-3xl text-blue-400 font-bold"
+        >
+          Access Denied. Please login to OneCart!
+        </motion.div>
+      </div>
+    );
+  }
 
-  if (!order)
-    return <div className="mt-32 text-center text-3xl text-white">Order not found!</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center gap-6">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="w-16 h-16 border-t-4 border-b-4 border-cyan-400 rounded-full"
+        />
+        <p className="text-xl text-cyan-300 font-medium tracking-widest animate-pulse">
+          DECRYPTING ONECART ORDER...
+        </p>
+      </div>
+    );
+  }
+
+  if (error || !order) {
+    return (
+      <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center gap-6">
+        <p className="text-3xl text-red-500 font-bold">{error || "Order anomalies detected. Not found."}</p>
+        <button 
+          onClick={() => navigate('/orderhistory')}
+          className="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-full text-white font-bold transition-all"
+        >
+          Return to History
+        </button>
+      </div>
+    );
+  }
+
+  const currentStepIndex = getStatusIndex(order.status);
+  const progressPercentage = (currentStepIndex / (statusSteps.length - 1)) * 100;
 
   return (
-    <div className="min-h-screen bg-[#0f1724] text-white pt-24 px-4 sm:px-6 max-w-7xl mx-auto">
-      {/* Title */}
-      <motion.h1
-        className="text-5xl font-extrabold mb-12 text-teal-300 border-b-4 border-teal-400 inline-block pb-2"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6, type: "spring", stiffness: 120 }}
-      >
-        Order Details
-      </motion.h1>
-
-      {/* Order + Delivery Info */}
+    <div className="relative min-h-screen bg-[#020617] text-white overflow-x-hidden font-sans pb-32">
+      {/* Animated Deep Blue Background Orbs */}
       <motion.div
-        className="flex flex-col md:flex-row gap-8 mb-12"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        {/* Order Info */}
-        <motion.div
-          className="flex-1 bg-white/5 p-6 rounded-2xl shadow-lg flex flex-col gap-4 hover:scale-[1.02] transition-transform duration-300"
-          whileHover={{ scale: 1.02 }}
-        >
-          <h2 className="text-2xl font-bold text-teal-300 mb-4">Order Summary</h2>
-          <p><span className="font-bold">Order ID:</span> {order._id}</p>
-          <p><span className="font-bold">Created At:</span> {new Date(order.date).toLocaleString()}</p>
-          <p className="flex items-center gap-2">
-            <span className="font-bold">Payment Method:</span>
-            {order.paymentMethod === "COD" ? <FaMoneyBillWave className="text-green-400"/> : <FaRupeeSign className="text-blue-400"/>} {order.paymentMethod}
-          </p>
-          <p><span className="font-bold">Total Amount:</span> ${order.amount.toFixed(2)}</p>
-          <p><span className="font-bold">Payment Status:</span> {order.paymentStatus ? "Paid" : "Pending"}</p>
-        </motion.div>
+        animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.15, 0.08] }}
+        transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+        className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-blue-700 rounded-full blur-[150px] pointer-events-none"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.3, 1], opacity: [0.08, 0.12, 0.08] }}
+        transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 1 }}
+        className="fixed bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-cyan-600 rounded-full blur-[150px] pointer-events-none"
+      />
 
-        {/* Delivery Info */}
-        <motion.div
-          className="flex-1 bg-white/5 p-6 rounded-2xl shadow-lg flex flex-col gap-4 hover:scale-[1.02] transition-transform duration-300"
-          whileHover={{ scale: 1.02 }}
-        >
-          <h2 className="text-2xl font-bold text-teal-300 mb-4">Delivery Address</h2>
-          <p className="flex items-center gap-2"><FaUser className="text-teal-400"/> {order.address.name}</p>
-          <p className="flex items-center gap-2"><FaEnvelope className="text-teal-400"/> {order.address.email}</p>
-          <p className="flex items-center gap-2"><FaPhone className="text-teal-400"/> {order.address.phone}</p>
-          <p className="flex items-center gap-2"><FaMapMarkerAlt className="text-teal-400"/> {order.address.street}, {order.address.landmark && order.address.landmark + ", "} {order.address.city}, {order.address.state}, {order.address.zip}, {order.address.country}</p>
-        </motion.div>
-      </motion.div>
-
-      {/* Ordered Products */}
-      <motion.div className="flex flex-col gap-6 mb-12">
-        <h2 className="text-3xl font-bold text-teal-300 mb-4">Ordered Products</h2>
-        {order.products.map((item, idx) => (
-          <motion.div
-            key={idx}
-            className="flex flex-col md:flex-row items-center gap-6 border border-white/10 p-5 rounded-2xl bg-white/5 hover:bg-white/10 hover:shadow-xl transition-all duration-500"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: idx * 0.1, duration: 0.5, type: "spring", stiffness: 200 }}
+      <div className="max-w-6xl mx-auto pt-28 px-6 relative z-10">
+        
+        {/* Header & Back Button */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-6">
+          <motion.button
+            onClick={() => navigate(-1)}
+            whileHover={{ x: -5, scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-3 px-6 py-3 bg-[#0f172a]/80 backdrop-blur-md border border-gray-800 hover:border-blue-500/50 rounded-full text-blue-400 font-semibold transition-all shadow-lg"
           >
-            <motion.img
-              src={item.product.image1}
-              alt={item.product.name}
-              className="w-28 h-28 md:w-36 md:h-36 object-contain rounded-xl cursor-pointer"
-              whileHover={{ scale: 1.15, rotate: 5 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            />
-            <div className="flex-1 space-y-2">
-              <h3 className="text-xl md:text-2xl font-bold">{item.product.name}</h3>
-              <p className="text-white font-semibold">Qty: {item.quantity}</p>
-              <p className="text-white/80 font-medium">Price: ${item.price.toFixed(2)}</p>
-              <p className="text-white/80 font-medium">Subtotal: ${(item.price * item.quantity).toFixed(2)}</p>
+            <FaArrowLeft /> Back to Orders
+          </motion.button>
+          
+          <div className="text-left md:text-right">
+            <motion.h1
+              className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-600 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
+              Order Details
+            </motion.h1>
+            <p className="text-gray-400 font-mono mt-2 tracking-wider">ID: {order._id}</p>
+          </div>
+        </div>
+
+        <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-8">
+          
+          {/* Top Info Cards */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Order Summary */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ scale: 1.02, boxShadow: "0px 0px 30px rgba(59,130,246,0.1)" }}
+              className="bg-[#0f172a]/60 backdrop-blur-xl border border-gray-800 rounded-[2rem] p-8 relative overflow-hidden group"
+            >
+              <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                <FaCreditCard size={80} className="text-blue-500" />
+              </div>
+              <h2 className="text-2xl font-bold text-cyan-400 mb-6 flex items-center gap-3">
+                <FaCheckCircle /> Order Summary
+              </h2>
+              <div className="space-y-4 text-gray-300 relative z-10">
+                <p className="flex justify-between border-b border-gray-800 pb-2">
+                  <span className="text-gray-500">Date Placed</span>
+                  <span className="font-medium text-white">{new Date(order.date).toLocaleString()}</span>
+                </p>
+                <p className="flex justify-between border-b border-gray-800 pb-2">
+                  <span className="text-gray-500">Payment Method</span>
+                  <span className="font-medium text-white flex items-center gap-2">
+                    {order.paymentMethod === "COD" ? <FaMoneyBillWave className="text-green-400"/> : <FaRupeeSign className="text-blue-400"/>} 
+                    {order.paymentMethod}
+                  </span>
+                </p>
+                <p className="flex justify-between border-b border-gray-800 pb-2">
+                  <span className="text-gray-500">Payment Status</span>
+                  <span className={`font-bold ${order.paymentStatus ? "text-green-400" : "text-yellow-400"}`}>
+                    {order.paymentStatus ? "Verified" : "Pending Authorization"}
+                  </span>
+                </p>
+                <p className="flex justify-between pt-2">
+                  <span className="text-lg text-gray-400">Total Amount</span>
+                  <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+                    ${order.amount.toFixed(2)}
+                  </span>
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Delivery Address */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ scale: 1.02, boxShadow: "0px 0px 30px rgba(6,182,212,0.1)" }}
+              className="bg-[#0f172a]/60 backdrop-blur-xl border border-gray-800 rounded-[2rem] p-8 relative overflow-hidden group"
+            >
+               <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                <FaMapMarkerAlt size={80} className="text-cyan-500" />
+              </div>
+              <h2 className="text-2xl font-bold text-cyan-400 mb-6 flex items-center gap-3">
+                <FaHome /> Delivery Destination
+              </h2>
+              <div className="space-y-4 text-gray-300 relative z-10">
+                <div className="flex items-center gap-4 bg-white/5 p-3 rounded-xl border border-white/5">
+                  <FaUser className="text-blue-500 text-xl" />
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wider">Recipient</p>
+                    <p className="font-semibold text-white">{order.address?.name}</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
+                    <FaEnvelope className="text-blue-500" />
+                    <p className="text-sm truncate w-full" title={order.address?.email}>{order.address?.email}</p>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
+                    <FaPhone className="text-blue-500" />
+                    <p className="text-sm">{order.address?.phone}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-white/5 p-4 rounded-xl border border-white/5">
+                  <FaMapMarkerAlt className="text-blue-500 mt-1" />
+                  <p className="text-sm leading-relaxed">
+                    {order.address?.street}, {order.address?.landmark && `${order.address.landmark}, `} <br />
+                    {order.address?.city}, {order.address?.state} {order.address?.zip} <br />
+                    {order.address?.country}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Epic Order Tracking Bar */}
+          <motion.div
+            variants={itemVariants}
+            className="bg-[#0f172a]/80 backdrop-blur-2xl border border-gray-800 rounded-[2rem] p-8 md:p-12 shadow-2xl"
+          >
+            <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-12 text-center tracking-widest uppercase">
+              Live Shipment Status
+            </h2>
+            
+            <div className="relative w-full max-w-4xl mx-auto">
+              {/* Background Track */}
+              <div className="absolute top-1/2 left-0 w-full h-2 bg-gray-800 rounded-full -translate-y-1/2" />
+              
+              {/* Animated Progress Fill */}
+              <motion.div 
+                className="absolute top-1/2 left-0 h-2 bg-gradient-to-r from-blue-600 via-cyan-400 to-teal-300 rounded-full -translate-y-1/2 shadow-[0_0_15px_rgba(6,182,212,0.6)]"
+                initial={{ width: "0%" }}
+                animate={{ width: `${progressPercentage}%` }}
+                transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
+              />
+
+              {/* Status Nodes */}
+              <div className="relative flex justify-between items-center z-10">
+                {statusSteps.map((step, index) => {
+                  const isActive = index <= currentStepIndex;
+                  const isCurrent = index === currentStepIndex;
+                  
+                  return (
+                    <div key={step} className="flex flex-col items-center">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: index * 0.2 + 0.2, type: "spring" }}
+                        className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center text-2xl transition-all duration-500 ${
+                          isActive 
+                            ? "bg-[#020617] border-2 border-cyan-400 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.4)]" 
+                            : "bg-gray-900 border-2 border-gray-700 text-gray-600"
+                        }`}
+                      >
+                        {index === 0 && <FaBoxOpen />}
+                        {index === 1 && <FaHourglassHalf className={isCurrent ? "animate-spin-slow" : ""} />}
+                        {index === 2 && <FaTruck className={isCurrent ? "animate-pulse" : ""} />}
+                        {index === 3 && <FaHome />}
+                      </motion.div>
+                      <motion.p 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: index * 0.2 + 0.5 }}
+                        className={`absolute -bottom-10 text-xs md:text-sm font-bold uppercase tracking-wider ${isActive ? "text-cyan-300" : "text-gray-600"}`}
+                      >
+                        {step}
+                      </motion.p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </motion.div>
-        ))}
-      </motion.div>
 
-      {/* Order Tracking */}
-      <motion.div
-        className="bg-white/5 p-6 rounded-2xl shadow-lg flex flex-col gap-6"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <h2 className="text-2xl font-bold text-teal-300 mb-4">Order Tracking</h2>
-        <div className="flex items-center gap-4 justify-between relative">
-          {statusSteps.map((step, index) => (
-            <div key={index} className="flex-1 flex flex-col items-center relative">
-              <motion.div
-                className={`w-12 h-12 rounded-full flex items-center justify-center ${getStatusIndex(order.status) >= index ? "bg-teal-400" : "bg-white/20"} text-black z-10`}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: index * 0.2, type: "spring", stiffness: 200 }}
-              >
-                {getStatusIndex(order.status) >= index ? <FaCheckCircle /> : <FaHourglassHalf />}
-              </motion.div>
-              <p className="mt-2 text-sm text-white/80">{step}</p>
-              {index < statusSteps.length - 1 && (
+          {/* Ordered Products Grid */}
+          <motion.div variants={itemVariants} className="pt-8">
+            <h2 className="text-3xl font-bold text-white mb-8 border-l-4 border-blue-500 pl-4">Manifested Items</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {order.products.map((item, idx) => (
                 <motion.div
-                  className={`absolute top-5 left-1/2 transform -translate-x-1/2 w-full h-1 ${getStatusIndex(order.status) >= index ? "bg-teal-400" : "bg-white/20"}`}
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ delay: index * 0.2 + 0.2, duration: 0.5 }}
-                ></motion.div>
-              )}
+                  key={idx}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="bg-gray-900/40 backdrop-blur-md border border-gray-800 hover:border-blue-500/40 rounded-2xl p-5 flex items-center gap-5 transition-all shadow-lg group"
+                >
+                  <div className="w-24 h-24 rounded-xl bg-white/5 p-2 flex-shrink-0 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <img
+                      src={item.product?.image1}
+                      alt={item.product?.name}
+                      className="w-full h-full object-contain drop-shadow-xl"
+                    />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <h3 className="text-lg font-bold text-gray-100 line-clamp-1 group-hover:text-blue-400 transition-colors">
+                      {item.product?.name}
+                    </h3>
+                    <div className="flex items-center gap-3 text-sm text-gray-400 font-mono">
+                      <span className="bg-gray-800 px-2 py-1 rounded-md">Qty: {item.quantity}</span>
+                      <span>${item.price.toFixed(2)}</span>
+                    </div>
+                    <p className="text-cyan-400 font-bold pt-2">
+                      Sub: ${(item.price * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          ))}
-        </div>
-      </motion.div>
+          </motion.div>
+
+        </motion.div>
+      </div>
     </div>
   );
 };

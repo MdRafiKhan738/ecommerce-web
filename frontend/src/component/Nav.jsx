@@ -103,7 +103,7 @@ const Nav = () => {
               className='w-[30px] h-[30px] bg-black/20 text-black rounded-full flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-110'
               onClick={() => setShowProfile(!showProfile)}
             >
-              {userData?.name.slice(0, 1)}
+              {userData?.name?.slice(0, 1)}
             </div>
           )}
 
