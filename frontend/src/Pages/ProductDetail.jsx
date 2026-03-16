@@ -72,7 +72,7 @@ const ProductDetail = () => {
     try {
       console.log("Adding to cart:", { userId: userData._id, productId: product._id, quantity });
       const res = await axios.post(
-        "http://localhost:5000/api/cart/add",
+        "https://onecartbackend-jbgj.onrender.com/api/cart/add",
         { userId: userData._id, productId: product._id, quantity },
         { withCredentials: true }
       );
@@ -108,7 +108,7 @@ const ProductDetail = () => {
     if (!userData) return alert("Login first!");
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/reviews/add",
+        "https://onecartbackend-jbgj.onrender.com/api/reviews/add",
         { user: userData.name, productId: product._id, rating: userReview.rating, comment: userReview.comment },
         { withCredentials: true }
       );
