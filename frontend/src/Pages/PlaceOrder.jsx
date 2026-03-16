@@ -166,7 +166,7 @@ const PlaceOrder = () => {
   if (loading) return <div className="mt-32 text-center text-3xl text-white animate-pulse">Loading cart...</div>;
 
   return (
-    <div className="min-h-screen bg-[#0f1724] text-white pt-24 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#0f1724] text-white pt-24 max-w-7xl ">
       <motion.h1
         className="text-5xl font-extrabold mb-10 text-teal-300 border-b-4 border-teal-400 inline-block pb-2"
         initial={{ scale: 0.8, opacity: 0 }}
