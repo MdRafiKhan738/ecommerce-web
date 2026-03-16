@@ -120,7 +120,7 @@ const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f1724] text-white pt-24 pb-12   max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#0f1724] text-white pt-24 pb-12   max-w-7xl ">
       <div className="flex items-center gap-4 mb-8">
         <FaShoppingCart className="text-4xl text-teal-400" />
         <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-blue-500">
