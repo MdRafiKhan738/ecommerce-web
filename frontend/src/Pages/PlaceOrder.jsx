@@ -51,7 +51,7 @@ const PlaceOrder = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/cart/${userData._id}`,
+        `https://onecartbackend-jbgj.onrender.com/api/cart/${userData._id}`,
         { withCredentials: true }
       );
       const items = res.data.products || [];
@@ -142,7 +142,7 @@ const PlaceOrder = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/order/placeorder",
+        "https://onecartbackend-jbgj.onrender.com/order/placeorder",
         {
           items: itemsToSend,
           amount: itemsToSend.reduce((acc, i) => acc + i.price * i.quantity, 0),
