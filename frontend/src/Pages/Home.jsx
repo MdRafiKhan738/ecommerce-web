@@ -71,10 +71,7 @@ const Home = () => {
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col gap-16">
         <Product />
         <OurPolicy />
-      </div>
-
-      <Footer />
-    </div>
+     
   )
 }
 
