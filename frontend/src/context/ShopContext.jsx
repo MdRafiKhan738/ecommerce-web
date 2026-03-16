@@ -17,7 +17,7 @@ const ShopContext = ({ children }) => {
   // Fetch all products
   const getproducts = async () => {
     try {
-      const result = await axios.get("http://localhost:5000/product/list")
+      const result = await axios.get("https://onecartbackend-jbgj.onrender.com/product/list")
       setproduct(result.data)
     } catch (error) {
       console.log("ShopContext error:", error)
