@@ -28,7 +28,7 @@ const Cart = () => {
     const fetchCart = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/cart/${userData._id}`,
+          `https://onecartbackend-jbgj.onrender.com/api/cart/${userData._id}`,
           { withCredentials: true }
         );
         const items = res.data.products || [];
@@ -58,7 +58,7 @@ const removeItem = async (productId) => {
 
   try {
     const res = await axios.post(
-      "http://localhost:5000/api/cart/remove",
+      "https://onecartbackend-jbgj.onrender.com/api/cart/remove",
       { userId: userData._id, productId },
       { withCredentials: true }
     );
@@ -84,7 +84,7 @@ const removeItem = async (productId) => {
     if (qty < 1) return;
     try {
       await axios.post(
-        "http://localhost:5000/api/cart/update",
+        "https://onecartbackend-jbgj.onrender.com/api/cart/update",
         { userId: userData._id, productId, quantity: qty },
         { withCredentials: true }
       );
