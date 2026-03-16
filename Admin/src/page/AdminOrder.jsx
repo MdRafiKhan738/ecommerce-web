@@ -18,7 +18,7 @@ const AdminOrder = () => {
       setLoading(true);
       setError("");
       const res = await axios.get(
-        "http://localhost:5000/adminorder/listallorders",
+        "https://onecartbackend-jbgj.onrender.com/adminorder/listallorders",
         { withCredentials: true }
       );
       // Ensure image URLs are absolute
@@ -31,7 +31,7 @@ const AdminOrder = () => {
             image1:
               item.product?.image1?.startsWith("http")
                 ? item.product.image1
-                : `http://localhost:5000/${item.product?.image1 || ""}`,
+                : `https://onecartbackend-jbgj.onrender.com/${item.product?.image1 || ""}`,
           },
         })),
       }));
@@ -49,7 +49,7 @@ const AdminOrder = () => {
     try {
       setUpdatingOrderId(orderId);
       await axios.put(
-        `http://localhost:5000/adminorder/${orderId}/status`,
+        `https://onecartbackend-jbgj.onrender.com/adminorder/${orderId}/status`,
         { status: newStatus },
         { withCredentials: true }
       );
