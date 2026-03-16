@@ -3,24 +3,21 @@ import Background from '../component/Background'
 import Product from './Product'
 import OurPolicy from '../component/OurPolicy'
 
-
-// Importing icons for the premium navigation
+// Icons for the premium navigation
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { RxDotFilled } from 'react-icons/rx'
 
 const Home = () => {
   const [herocount, setherocount] = useState(0)
-  const totalSlides = 10 // Make sure this matches the number of images in your Background component
+  const totalSlides = 4 
 
-  // Auto-play functionality
   useEffect(() => {
     const interval = setInterval(() => {
       setherocount(prev => (prev + 1) % totalSlides)
-    }, 6000) // Slightly faster for a modern feel
+    }, 6000)
     return () => clearInterval(interval)
   }, [totalSlides])
 
-  // Manual navigation controls
   const prevSlide = () => {
     setherocount(prev => (prev === 0 ? totalSlides - 1 : prev - 1))
   }
@@ -30,48 +27,52 @@ const Home = () => {
   }
 
   return (
-    <div className="w-screen flex flex-col bg-white">
+    <div className="w-full flex flex-col overflow-x-hidden bg-white">
       
-      {/* Banner Container - group class added for hover effects */}
-      <div className="relative w-full h-[calc(100vh-64px)] mt-[64px] overflow-hidden group">
+      {/* 1. THE HERO BANNER: Full screen, no borders */}
+      <section className="relative w-full h-[100vh] overflow-hidden group">
         <Background herocount={herocount} />
 
-        {/* Left Arrow (Glassmorphism effect, appears on hover) */}
+        {/* Navigation Arrows: Glassmorphism style */}
         <button
           onClick={prevSlide}
-          className="absolute top-1/2 left-6 -translate-y-1/2 z-20 text-white/70 hover:text-white bg-white/10 hover:bg-white/30 backdrop-blur-md p-3 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer"
+          className="absolute top-1/2 left-8 -translate-y-1/2 z-20 text-white/80 hover:text-white bg-black/5 hover:bg-black/20 backdrop-blur-xl p-4 rounded-full transition-all duration-500 opacity-0 group-hover:opacity-100 cursor-pointer border border-white/10"
         >
-          <FiChevronLeft size={32} />
+          <FiChevronLeft size={30} />
         </button>
 
-        {/* Right Arrow (Glassmorphism effect, appears on hover) */}
         <button
           onClick={nextSlide}
-          className="absolute top-1/2 right-6 -translate-y-1/2 z-20 text-white/70 hover:text-white bg-white/10 hover:bg-white/30 backdrop-blur-md p-3 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer"
+          className="absolute top-1/2 right-8 -translate-y-1/2 z-20 text-white/80 hover:text-white bg-black/5 hover:bg-black/20 backdrop-blur-xl p-4 rounded-full transition-all duration-500 opacity-0 group-hover:opacity-100 cursor-pointer border border-white/10"
         >
-          <FiChevronRight size={32} />
+          <FiChevronRight size={30} />
         </button>
 
-        {/* Dot Indicators */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-3 bg-black/20 backdrop-blur-md px-5 py-2 rounded-full">
+        {/* Minimalist Slide Progress Pill */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center space-x-2 bg-white/10 backdrop-blur-2xl px-6 py-2.5 rounded-full border border-white/20 shadow-2xl">
           {Array.from({ length: totalSlides }).map((_, index) => (
             <button
               key={index}
               onClick={() => setherocount(index)}
-              className={`transition-all duration-300 ease-in-out flex items-center justify-center
-                ${herocount === index ? "text-white scale-150" : "text-white/40 hover:text-white/80"}`}
-            >
-              <RxDotFilled size={20} />
-            </button>
+              className={`transition-all duration-700 ease-in-out rounded-full
+                ${herocount === index ? "w-8 h-1.5 bg-white" : "w-1.5 h-1.5 bg-white/30 hover:bg-white/60"}`}
+            />
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* Main Content Layout */}
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col gap-16">
-        <Product />
-        <OurPolicy />
-     
+      {/* 2. PRODUCT SECTION: Clean transition, no forced margins */}
+      <main className="w-full py-20">
+          <Product />
+      </main>
+
+      {/* 3. POLICY SECTION: Edge-to-edge subtle background */}
+      <section className="w-full bg-gray-50/50 py-24 border-y border-gray-100">
+          <OurPolicy />
+      </section>
+
+      {/* Footer is handled globally, so it's removed from here */}
+    </div>
   )
 }
 
