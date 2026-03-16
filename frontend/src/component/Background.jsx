@@ -12,7 +12,7 @@ import back10 from "../assets/E-commerce MERN Assets/kidswear44.jpg"
 // Add your other imports here...
 
 const Background = ({ herocount }) => {
-  const images = [back1, back2, back3, back4,back5,back6,back7,back8,back9,back10]
+  const images = [back1, back2, back3, back4]
 
   return (
     <div className="w-full h-full relative overflow-hidden bg-gray-100 flex items-center justify-center">
