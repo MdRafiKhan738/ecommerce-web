@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Background from '../component/Background'
 import Product from './Product'
 import OurPolicy from '../component/OurPolicy'
-import Footer from '../component/Footer'
+
 
 // Importing icons for the premium navigation
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
