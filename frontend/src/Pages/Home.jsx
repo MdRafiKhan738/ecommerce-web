@@ -10,7 +10,7 @@ import { RxDotFilled } from 'react-icons/rx'
 
 const Home = () => {
   const [herocount, setherocount] = useState(0)
-  const totalSlides = 4 // Make sure this matches the number of images in your Background component
+  const totalSlides = 10 // Make sure this matches the number of images in your Background component
 
   // Auto-play functionality
   useEffect(() => {
