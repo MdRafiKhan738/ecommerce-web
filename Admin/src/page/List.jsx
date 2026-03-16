@@ -9,7 +9,7 @@ const List = () => {
   // 🧠 Product list load
   const handlelist = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/product/list");
+      const res = await axios.get("https://onecartbackend-jbgj.onrender.com/product/list");
       console.log("🔥 Product List Response:", res.data);
       setlist(res.data);
     } catch (error) {
@@ -25,7 +25,7 @@ const List = () => {
     if (!confirmRemove) return; // If user clicks cancel, stop here
 
     try {
-      await axios.post(`http://localhost:5000/product/remove/${id}`);
+      await axios.post(`https://onecartbackend-jbgj.onrender.com/product/remove/${id}`);
       setlist((prev) => prev.filter((item) => item._id !== id));
       alert("🗑️ Product removed successfully!");
     } catch (error) {
