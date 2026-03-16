@@ -44,7 +44,7 @@ const Add = () => {
         if (img) formdata.append(`image${i + 1}`, img)
       })
 
-      const result = await axios.post("http://localhost:5000/product/addproduct", formdata, { withCredentials: true })
+      const result = await axios.post("https://onecartbackend-jbgj.onrender.com/product/addproduct", formdata, { withCredentials: true })
       if (result.data) {
         setSuccess(true)
         setCreatedProduct(result.data)
