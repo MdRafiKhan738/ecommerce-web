@@ -26,7 +26,7 @@ const App = () => {
   return (
     <div className='relative'>
       {/* ✅ Loader শুধুমাত্র তখন দেখাবে যখন loading = true */}
-      {loading && <Loader />}
+   
       <Routes>
 
 
