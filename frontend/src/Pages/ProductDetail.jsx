@@ -29,7 +29,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/product/${productid}`, { withCredentials: true });
+        const res = await axios.get(`https://onecartbackend-jbgj.onrender.com/product/${productid}`, { withCredentials: true });
         setProduct(res.data);
         setMainImage(res.data.image1);
       } catch (err) {
@@ -43,7 +43,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/reviews/${productid}`, { withCredentials: true });
+        const res = await axios.get(`https://onecartbackend-jbgj.onrender.com/api/reviews/${productid}`, { withCredentials: true });
         setReviews(res.data || []);
       } catch (err) {
         console.error(err);
@@ -57,7 +57,7 @@ const ProductDetail = () => {
     if (!userData || !product) return;
     const checkWishlist = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/wishlist/${userData._id}`, { withCredentials: true });
+        const res = await axios.get(`https://onecartbackend-jbgj.onrender.com/api/wishlist/${userData._id}`, { withCredentials: true });
         setWishlist(res.data?.products?.some(p => p._id === product._id));
       } catch (err) {
         console.error(err);
@@ -93,7 +93,7 @@ const ProductDetail = () => {
     if (!userData) return alert("Login first!");
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/wishlist/toggle",
+        "https://onecartbackend-jbgj.onrender.com/api/wishlist/toggle",
         { userId: userData._id, productId: product._id },
         { withCredentials: true }
       );
