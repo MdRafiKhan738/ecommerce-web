@@ -34,7 +34,7 @@ const OrderDetails = () => {
     try {
       setLoading(true);
       setError("");
-      const res = await axios.get(`http://localhost:5000/order/${orderId}`, {
+      const res = await axios.get(`https://onecartbackend-jbgj.onrender.com/order/${orderId}`, {
         withCredentials: true
       });
       setOrder(res.data);
