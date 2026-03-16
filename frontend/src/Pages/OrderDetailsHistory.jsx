@@ -24,7 +24,7 @@ const OrderDetailsHistory = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/userroutes/orders", {
+      const res = await axios.get("https://onecartbackend-jbgj.onrender.com/userroutes/orders", {
         withCredentials: true,
       });
       setOrders(res.data);
