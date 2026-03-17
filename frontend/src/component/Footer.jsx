@@ -127,7 +127,7 @@ const Footer = () => {
           variants={itemVariants}
           className="border-t border-blue-900/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-sm"
         >
-          <p>© 2026 <span className="text-blue-400 font-semibold">ONE CART</span> <p   onClick={() => window.location.href = `https://mdrafikhan.vercel.app`}> Dev By Md Rafi Khan</p></p>
+          <p>© 2026 <span className="text-blue-400 font-semibold">ONE CART</span> <p  className="text-blue-400 font-semibold cursor-pointer"  onClick={() => window.location.href = `https://mdrafikhan.vercel.app`}> Dev By Md Rafi Khan</p></p>
           <div className="flex gap-8">
             <a href="/privacypolicy" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="/Termsofservice" className="hover:text-white transition-colors">Terms of Service</a>
