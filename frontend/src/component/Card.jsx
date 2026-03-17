@@ -75,7 +75,7 @@ onClick={()=>navigate(`/productdetails/${id}`)}
             {currency} {price}
           </span>
         </div>
-        <p className="text-[#b0b0b0] text-sm mt-1">Free Delivery • 7 Days Return</p>
+        <p className="text-[#b0b0b0] text-sm mt-1">  7 Days Return</p>
       </div>
 
       {/* Glow effect */}
