@@ -254,7 +254,7 @@ const AiUltra = () => {
 
     return(
         <>
-        <div className="fixed bottom-6 right-28 z-50">
+        <div className="fixed bottom-6 right-38 z-50">
             <img src={aiIcon} alt="rafiai" className="w-16 h-16 cursor-pointer rounded-full shadow-lg" onClick={()=>setIsOpen(p=>!p)} />
         </div>
         {isOpen && (
