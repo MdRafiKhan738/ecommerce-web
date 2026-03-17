@@ -317,7 +317,7 @@ const Cart = () => {
                 className="group w-full flex items-center justify-center gap-3 py-5 bg-gradient-to-r from-teal-400 to-emerald-400 text-[#0f1724] font-black text-xl rounded-2xl hover:from-teal-300 hover:to-emerald-300 transition-all duration-300 overflow-hidden relative"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Secure Checkout <FaArrowRight className="group-hover:translate-x-2 transition-transform duration-300" />
+                  Secure Checkout <FaArrowRight className="group-hover:translate-x-2 transition-transform duration-300 cursor-pointer" />
                 </span>
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
               </motion.button>
