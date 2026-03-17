@@ -28,7 +28,7 @@ const Home = () => {
   return (
     <div className="w-screen flex flex-col">
       {/* HERO SECTION */}
-      <div className="relative w-full h-[calc(100vh-64px)] mt-[64px] overflow-hidden">
+      <div className="relative w-full h-[calc(100vh-64px)] mt-[68px] overflow-hidden">
         <Background herocount={herocount} />
 
         {/* LEFT */}
