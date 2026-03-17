@@ -76,6 +76,7 @@ const Home = () => {
       {/* ================= POLICY SECTION ================= */}
       <section className="w-full py-24 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-white to-gray-50 border-t border-gray-100">
         <OurPolicy />
+      </section>
 
   )
 }
