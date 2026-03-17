@@ -2,78 +2,90 @@ import React, { useContext } from 'react'
 import { shopdatacontext } from '../context/ShopContext'
 import { useNavigate } from 'react-router-dom'
 
-const Card = ({ name, image, image2, id, price }) => {
+const Card = ({ name, image, id, price }) => {
   const { currency } = useContext(shopdatacontext)
-  const navigate = useNavigate()
-
-  // Handle cases where image might be an array (e.g., image[0], image[1]) or separate props
-  const primaryImg = Array.isArray(image) ? image[0] : image
-
-
+let navigate=useNavigate()
   return (
     <div
-      onClick={() => navigate(`/productdetails/${id}`)}
       className="
         group relative w-[280px] sm:w-[300px] h-[420px]
         rounded-2xl overflow-hidden
-        bg-gradient-to-b from-[#1a1a1a]/80 to-[#0d0d0d]/90
-        backdrop-blur-xl border border-[#ffffff10]
-        shadow-[0_8px_30px_rgba(0,0,0,0.5)]
-        hover:shadow-[0_0_40px_rgba(0,255,255,0.1)]
-        hover:border-[#00ffff]/30
-        transform transition-all duration-500 ease-out
-        hover:-translate-y-1
+        bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d]
+        border border-[#2b2b2b]
+        shadow-[0_0_30px_rgba(0,255,255,0.05)]
+        hover:shadow-[0_0_50px_rgba(0,255,255,0.2)]
+        transform transition-all duration-500
+        hover:scale-[1.03]
         cursor-pointer
-        flex flex-col
       "
+onClick={()=>navigate(`/productdetails/${id}`)}
     >
-      {/* Product Image Container */}
-      <div className="relative w-full h-[75%] overflow-hidden bg-[#0a0a0a]">
-        {/* Primary Image */}
+      {/* Product Image */}
+      <div className="relative w-full h-[75%] overflow-hidden">
         <img
-          src={primaryImg}
+          src={image}
           alt={name}
           className="
-            absolute inset-0 w-full h-full object-cover
-            transition-all duration-700 ease-in-out
-            group-hover:scale-105
-            opacity-100 group-hover:opacity-0
+            w-full h-full object-cover
+            transition-transform duration-700 ease-in-out
+            group-hover:scale-110
           "
         />
-        
-        
-        
+
+        {/* Overlay on Hover */}
+        <div
+          className="
+            absolute inset-0 bg-gradient-to-t from-black/80 to-transparent
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-500
+            flex flex-col justify-end items-start p-4
+          "
+        >
+          <h3 className="text-[#aefeff] text-lg font-semibold mb-2 tracking-wide drop-shadow-md">
+            {name}
+          </h3>
+          <div className="text-white/90 text-sm mb-3">
+            Premium Quality Collection
+          </div>
+          <button
+            className="
+              bg-[#00ffff]/20 text-[#00ffff] border border-[#00ffff40]
+              backdrop-blur-md px-5 py-2 rounded-full text-sm
+              hover:bg-[#00ffff]/40 transition-all duration-300
+            " onClick={()=>navigate(`/productdetails/${id}`)}
+          >
+            View Details
+          </button>
+        </div>
       </div>
 
-      {/* Details Section (Clean, spatial layout) */}
-      <div className="w-full h-[25%] flex flex-col justify-between px-5 py-4 z-10 relative">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-[#f5f5f7] font-medium text-[17px] tracking-wide truncate w-full">
+      {/* Price & Info */}
+      <div className="w-full h-[25%] flex flex-col justify-center px-4 py-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-[#e8fafa] font-semibold text-lg tracking-wide truncate max-w-[70%]">
             {name}
           </h2>
-          <p className="text-[#86868b] text-xs font-light tracking-wider uppercase">
-            Premium Collection
-          </p>
-        </div>
-
-        <div className="flex items-center justify-between mt-auto">
-          <span className="text-[#00ffff] font-semibold text-lg tracking-tight drop-shadow-[0_0_8px_rgba(0,255,255,0.3)]">
+          <span
+            className="
+              bg-[#00ffff]/10 text-[#00ffff] font-semibold
+              px-3 py-1 rounded-full text-sm backdrop-blur-sm
+              border border-[#00ffff40]
+            "
+          >
             {currency} {price}
           </span>
-          <span className="text-[10px] text-[#86868b] bg-[#ffffff08] px-2 py-1 rounded-md border border-[#ffffff10]">
-            Free Delivery
-          </span>
         </div>
+        <p className="text-[#b0b0b0] text-sm mt-1">Free Delivery • 7 Days Return</p>
       </div>
 
-      {/* Subtle Spatial Glow */}
+      {/* Glow effect */}
       <div
         className="
-          absolute inset-0 pointer-events-none rounded-2xl
-          bg-gradient-to-tr from-[#00ffff05] to-transparent
-          opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out
+          absolute inset-0 pointer-events-none
+          bg-gradient-to-tr from-[#00ffff10] to-transparent
+          opacity-0 group-hover:opacity-100 transition-opacity duration-700
         "
-      />
+      ></div>
     </div>
   )
 }
