@@ -2,111 +2,78 @@ import React, { useContext } from 'react'
 import { shopdatacontext } from '../context/ShopContext'
 import { useNavigate } from 'react-router-dom'
 
-const Card = ({ name, image1, image2, id, price }) => {
+const Card = ({ name, image, image2, id, price }) => {
   const { currency } = useContext(shopdatacontext)
   const navigate = useNavigate()
+
+  // Handle cases where image might be an array (e.g., image[0], image[1]) or separate props
+  const primaryImg = Array.isArray(image) ? image[0] : image
+
 
   return (
     <div
       onClick={() => navigate(`/productdetails/${id}`)}
       className="
-        group relative w-[280px] sm:w-[320px] h-[450px]
-        rounded-3xl overflow-hidden
-        bg-[#0a0a0a] border border-[#ffffff0a]
-        hover:border-[#00ffff50]
-        transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]
-        cursor-pointer select-none
-        shadow-[0_20px_50px_rgba(0,0,0,0.3)]
+        group relative w-[280px] sm:w-[300px] h-[420px]
+        rounded-2xl overflow-hidden
+        bg-gradient-to-b from-[#1a1a1a]/80 to-[#0d0d0d]/90
+        backdrop-blur-xl border border-[#ffffff10]
+        shadow-[0_8px_30px_rgba(0,0,0,0.5)]
+        hover:shadow-[0_0_40px_rgba(0,255,255,0.1)]
+        hover:border-[#00ffff]/30
+        transform transition-all duration-500 ease-out
+        hover:-translate-y-1
+        cursor-pointer
+        flex flex-col
       "
     >
-      {/* Visual Container: Image Crossfade */}
-      <div className="relative w-full h-[78%] overflow-hidden">
-        {/* Main Image */}
+      {/* Product Image Container */}
+      <div className="relative w-full h-[75%] overflow-hidden bg-[#0a0a0a]">
+        {/* Primary Image */}
         <img
-          src={image1}
+          src={primaryImg}
           alt={name}
           className="
             absolute inset-0 w-full h-full object-cover
-            transition-all duration-1000 ease-in-out
-            group-hover:scale-110 group-hover:opacity-0
+            transition-all duration-700 ease-in-out
+            group-hover:scale-105
+            opacity-100 group-hover:opacity-0
           "
         />
         
-        {/* Hover Image (Image 2) */}
-        <img
-          src={image2 || image1} // Fallback to image1 if 2 is missing
-          alt={`${name} perspective`}
-          className="
-            absolute inset-0 w-full h-full object-cover
-            transition-all duration-1000 ease-in-out
-            scale-110 group-hover:scale-100
-            opacity-0 group-hover:opacity-100
-          "
-        />
+        
+        
+      </div>
 
-        {/* Floating Badge */}
-        <div className="absolute top-4 left-4 z-20">
-          <span className="
-            bg-black/40 backdrop-blur-md text-[#00ffff] text-[10px] 
-            font-bold tracking-[2px] uppercase px-3 py-1.5 rounded-full
-            border border-[#00ffff30]
-          ">
-            New Arrival
+      {/* Details Section (Clean, spatial layout) */}
+      <div className="w-full h-[25%] flex flex-col justify-between px-5 py-4 z-10 relative">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-[#f5f5f7] font-medium text-[17px] tracking-wide truncate w-full">
+            {name}
+          </h2>
+          <p className="text-[#86868b] text-xs font-light tracking-wider uppercase">
+            Premium Collection
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between mt-auto">
+          <span className="text-[#00ffff] font-semibold text-lg tracking-tight drop-shadow-[0_0_8px_rgba(0,255,255,0.3)]">
+            {currency} {price}
+          </span>
+          <span className="text-[10px] text-[#86868b] bg-[#ffffff08] px-2 py-1 rounded-md border border-[#ffffff10]">
+            Free Delivery
           </span>
         </div>
       </div>
 
-      {/* Content Section: OneCart Pro Aesthetic */}
-      <div className="
-        absolute bottom-0 w-full h-[22%] 
-        bg-gradient-to-t from-black via-black/90 to-transparent
-        flex flex-col justify-end px-6 pb-6
-      ">
-        <div className="flex flex-col gap-0.5">
-          <h2 className="
-            text-white font-medium text-[15px] 
-            tracking-tight leading-tight truncate 
-            group-hover:text-[#00ffff] transition-colors duration-500
-          ">
-            {name}
-          </h2>
-          <div className="flex items-center justify-between mt-2">
-            <div className="flex flex-col">
-              <span className="text-[#888] text-[11px] uppercase tracking-widest font-light">
-                Price
-              </span>
-              <span className="text-[#00ffff] font-bold text-xl tracking-tighter">
-                {currency}{price}
-              </span>
-            </div>
-            
-            {/* Interactive 'Add' visual (Static but high-end looking) */}
-            <div className="
-              w-10 h-10 rounded-full border border-[#ffffff20] 
-              flex items-center justify-center
-              group-hover:bg-[#00ffff] group-hover:border-[#00ffff]
-              transition-all duration-500
-            ">
-              <svg 
-                width="16" height="16" viewBox="0 0 24 24" fill="none" 
-                stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="text-white group-hover:text-black transition-colors duration-500"
-              >
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Spatial Overlay Glow */}
-      <div className="
-        absolute inset-0 pointer-events-none
-        bg-[radial-gradient(circle_at_50%_0%,rgba(0,255,255,0.08),transparent_70%)]
-        opacity-0 group-hover:opacity-100 transition-opacity duration-1000
-      "/>
+      {/* Subtle Spatial Glow */}
+      <div
+        className="
+          absolute inset-0 pointer-events-none rounded-2xl
+          bg-gradient-to-tr from-[#00ffff05] to-transparent
+          opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out
+        "
+      />
     </div>
   )
 }
