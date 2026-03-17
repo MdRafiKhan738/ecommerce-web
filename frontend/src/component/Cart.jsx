@@ -138,7 +138,7 @@ const Cart = () => {
     // FULL WIDTH BACKGROUND WRAPPER
     <div className="min-h-screen w-full bg-[#0f1724] text-white pt-24 pb-12 font-sans selection:bg-teal-400/30">
       
-      // CENTERED CONTENT WRAPPER (Fixes the margin bug!)
+
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
